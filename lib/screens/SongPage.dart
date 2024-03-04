@@ -14,6 +14,8 @@ class SongPage extends StatefulWidget
 class _SongPageState extends State<SongPage> {
   AudioPlayer audioPlayer = AudioPlayer();
   Song song = Song.song[0];
+  String url = Song.song[0].coverUrl;
+
 
   @override
     void initState(){
@@ -50,6 +52,12 @@ class _SongPageState extends State<SongPage> {
       super.dispose();
     }
 
+    void changeBackground() {
+      setState(() {
+        url = song.coverUrl;
+      });
+    }
+
     Stream<SeekBarData> get _seekBarDataStream => 
     rxdart.Rx.combineLatest2<Duration, Duration?, SeekBarData>(
       audioPlayer.positionStream,
@@ -74,7 +82,7 @@ class _SongPageState extends State<SongPage> {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            song.coverUrl,
+            url,
             fit: BoxFit.cover,
           ),
           const BackgroundFilter(),
@@ -82,7 +90,8 @@ class _SongPageState extends State<SongPage> {
           MusicPlayer(
             song: song,
             seekBarDataStream: _seekBarDataStream, 
-            audioPlayer: audioPlayer
+            audioPlayer: audioPlayer,
+            changeBackground: changeBackground,
             ),
          
         ],
@@ -97,11 +106,14 @@ class MusicPlayer extends StatelessWidget {
     required this.song,
     required Stream<SeekBarData> seekBarDataStream,
     required this.audioPlayer,
+    required this.changeBackground
   }) : _seekBarDataStream = seekBarDataStream;
 
   final Song song;
   final Stream<SeekBarData> _seekBarDataStream;
   final AudioPlayer audioPlayer;
+  final Function changeBackground;
+
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +162,7 @@ class MusicPlayer extends StatelessWidget {
               );
             }
           ),
-          PlayerButtons(audioPlayer: audioPlayer)
+          PlayerButtons(audioPlayer: audioPlayer, changeBackground: changeBackground)
         ],
       ),
     );

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 class PlayerButtons extends StatelessWidget {
+
   const PlayerButtons({
     super.key,
     required this.audioPlayer,
+    required this.changeBackground 
   });
 
   final AudioPlayer audioPlayer;
+  final Function changeBackground;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,10 @@ class PlayerButtons extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream, 
           builder: (context,index){
             return IconButton(
-              onPressed: audioPlayer.hasPrevious ? audioPlayer.seekToPrevious: null, 
+              onPressed: audioPlayer.hasPrevious ? () => {
+                changeBackground(),
+                audioPlayer.seekToPrevious()
+              }: null, 
               iconSize: 45,
               icon: Icon(
                 Icons.skip_previous,
@@ -84,7 +90,10 @@ class PlayerButtons extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream, 
           builder: (context,index){
             return IconButton(
-              onPressed: audioPlayer.hasNext ? audioPlayer.seekToNext: null, 
+              onPressed: audioPlayer.hasNext ? () => {
+                changeBackground(),
+                audioPlayer.seekToNext()
+              }: null, 
               iconSize: 45,
               icon: Icon(
                 Icons.skip_next,

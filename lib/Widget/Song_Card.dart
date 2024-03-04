@@ -35,7 +35,7 @@ class SongCard extends StatelessWidget {
           ),
           Container(
             height: 50,
-            width: MediaQuery.of(context).size.width*0.37,
+            width: MediaQuery.of(context).size.width*0.43,
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
